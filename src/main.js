@@ -4,15 +4,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import store from './store'
 
 Vue.use(VueRouter)
-
 Vue.use(Mint)
-// 引入文件
-import AppContainer from './AppContainer.vue' //主页
+    // 引入文件
+import App from './App.vue' //主页
 import routes from './router.js' //路由
-
-// 创建路由实例   下面的代码  我也不知道为啥这么写 反正这么写就对了....
 
 const router = new VueRouter({
     mode: 'history',
@@ -29,5 +27,6 @@ const app = new Vue({
         bus: new Vue(),
     },
     router,
-    render: h => h(AppContainer),
+    store,
+    render: h => h(App),
 }).$mount('#app')

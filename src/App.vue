@@ -1,36 +1,25 @@
 <template>
-<div class="container">
-        <!-- <div class="header">
-            <router-link to='/recommend'>推荐</router-link>
-            <router-link to='/rank'>排行</router-link>
-            <router-link to='/sheet'>歌单</router-link>
-            <router-link to='/me'>我的</router-link>
-        </div> -->
-        <div class="content">
-            <router-view></router-view>
-        </div>
-</div>
+    <div class="container" id="app">
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
     export default {
         data() {
-            return {}
+            return {
+
+            }
         }
     }
 </script>
 
-<style scoped>
+<style>
     .container {
         height: 100%;
         width: 100%;
         overflow-y: scroll;
-    }
-    
-    .content {
-        height: 100%;
         background-color: rgba(0, 0, 0, .1);
-        /*background-color: rgba(105, 25, 51, .3);*/
     }
 </style>
 
@@ -218,6 +207,9 @@
         .main .new {
             height: 40% !important;
         }
+        .swiper-pagination>span {
+            line-height: 200% !important;
+        }
     }
     
     @media screen and (width:960px) {
@@ -242,6 +234,12 @@
         .main .new {
             height: 40% !important;
         }
+        .swiper-pagination {
+            height: 13% !important;
+        }
+        .swiper-pagination>span {
+            line-height: 230% !important;
+        }
     }
     
     @media screen and (width:1280px) {
@@ -265,6 +263,12 @@
         }
         .main .new {
             height: 70% !important;
+        }
+        .swiper-pagination {
+            height: 10.5% !important;
+        }
+        .swiper-pagination>span {
+            line-height: 160% !important;
         }
     }
     

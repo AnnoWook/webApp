@@ -1,92 +1,86 @@
 <template>
-<div class="container">
-        <mt-header title="播放" class="fli">
-            <router-link to="/" slot="left">
-                <mt-button icon="back" class="return"></mt-button>
-            </router-link>
-        </mt-header>
-        <div class="main" >
-            <!-- 先留着 可能放置音量调节按钮 -->
-            <div class="volume">
-                <div class="sumvolume" v-on:touchmove='test'>
-                    <div class="currentvolume" v-on:touchstart='volume'>
+        <div id="play">
+            <mt-header title="播放" class="fli">
+                <a slot="left">
+                    <mt-button icon="back" class="return"></mt-button>
+                </a>
+            </mt-header>
+            <div class="main playmain">
+                <div class="volume">
+                    <div class="sumvolume" v-on:touchmove='test'>
+                        <div class="currentvolume" v-on:touchstart='volume'>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- 光碟 -->
-            <!--<div class="opticalDisk">
-
-            </div>-->
-            <div v-if="isLoading" class="loadinglrc">
-                等待歌词载入....
-            </div>
-            <div class="lyrics">
-                <ul>
-                    <li class="lyric">
-                        {{ ontwolyricstime }}
-                    </li>
-                    <li class="lyric">
-                        {{ onlyricstime }}
-                    </li>
-                    <li class="lyriccurrent">
-                        {{ lyricstime }}
-                    </li>
-                    <li class="lyric">
-                        {{ nextlyricstime }}
-                    </li>
-                    <li class="lyric">
-                        {{ nexttwolyricstime }}
-                    </li>
-                </ul>
-            </div>
-            <!-- 杂项 -->
-            <div class="">
-
-            </div>
-            <!-- 开始 暂停 进度条 时间 -->
-            <div class="playBack">
-                <input class="currentTime" v-model="currentTime">
-                <div class="schedule" v-on:click='leap'>
-                    <div class="currentProgress" >
-
-                    </div>
+                <div v-if="isLoading" class="loadinglrc">
+                    等待歌词载入....
                 </div>
-                <span class="totalTime">00:00</span>
-            </div>
-            <div class="buttons">
-                <div class="previous">
-                    <div class="long">
-
-                    </div>
-                    <div class="triangle">
-
-                    </div>
+                <div class="lyrics">
+                    <ul>
+                        <li class="lyric">
+                            {{ ontwolyricstime }}
+                        </li>
+                        <li class="lyric">
+                            {{ onlyricstime }}
+                        </li>
+                        <li class="lyriccurrent">
+                            {{ lyricstime }}
+                        </li>
+                        <li class="lyric">
+                            {{ nextlyricstime }}
+                        </li>
+                        <li class="lyric">
+                            {{ nexttwolyricstime }}
+                        </li>
+                    </ul>
                 </div>
-                <div class="pause playing" v-on:click='start'>
+                <div class="">
 
                 </div>
-                <div class="next">
-                    <div class="long">
+                <div class="playBack">
+                    <input class="currentTime" v-model="currentTime">
+                    <div class="schedule" v-on:click='leap'>
+                        <div class="currentProgress" >
+
+                        </div>
+                    </div>
+                    <span class="totalTime">00:00</span>
+                </div>
+                <div class="buttons">
+                    <div class="previous">
+                        <div class="long">
+
+                        </div>
+                        <div class="triangle">
+
+                        </div>
+                    </div>
+                    <div class="pause playing" v-on:click='start'>
 
                     </div>
-                    <div class="triangle">
+                    <div class="next">
+                        <div class="long">
 
+                        </div>
+                        <div class="triangle">
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <audio controls autoplay id="audio" style="display:none" v-on:canplay='monitor' v-on:timeupdate='realtime'>
-            <source src=''  id="source">
-        </audio>
-</div>
+
+
 </template>
 <script>
     import Vue from 'vue'
     import VueResource from 'vue-resource'
     import jquery from 'jquery'
+
     Vue.use(VueResource)
-        /*留个坑 待解决*/
+
+    /*留个坑 待解决*/
     export default {
         data() {
             return {
@@ -106,7 +100,7 @@
                 currentTime: '',
             }
         },
-        // 专门控制input 这类输入框的对象 watch
+        // // 专门控制input 这类输入框的对象 watch
         watch: {
             deep: true,
             currentTime: function(curVal, oldVal) {
@@ -146,6 +140,7 @@
         methods: {
             fetch(id) {
                 this.msg = id
+
                 document.querySelector('#audio').src = `http://ws.stream.qqmusic.qq.com/${id}.m4a?fromtag=46"`
                 this.$http.get(`https://route.showapi.com/213-2?musicid=${id}&showapi_appid=31967&showapi_timestamp=&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
                     .then(function(response) {
@@ -214,13 +209,23 @@
     }
 </script>
 
-<style scoped>
-    .container {
-        background-color: rgba(105, 25, 51, .55);
-    }
-</style>
 
 <style>
+    #play {
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+        background-color: rgba(156, 39, 176, .55);
+    }
+    /*页面底部播放器样式*/
+
+
+    /*全页面的播放器样式*/
+
+    .playmain {
+        height: 0;
+    }
+
     .loadinglrc {
         color: #fff;
         margin: auto;
@@ -228,30 +233,31 @@
         top: 14rem;
         left: 6rem;
     }
-    
+
     .fli {
-        height: 8%;
+        height: 7%;
         font-size: 1rem;
     }
-    
+
     .fli i {
         font-size: 1rem;
     }
-    
+
     .return {
         height: 100%;
     }
-    
+    /*光盘转动效果 div加类名*/
+
     .opticalDisk {
         margin: 0 1.5rem;
         width: 800px;
         height: 800px;
-        background: url(../image/timg.png) 0 0 no-repeat;
+        background: url(../../image/timg.png) 0 0 no-repeat;
         animation: circle_top 12s linear 0s forwards;
         animation-iteration-count: infinite;
         animation-play-state: running;
     }
-    
+
     @keyframes circle_top {
         form {
             transform: rotateZ(0deg);
@@ -260,60 +266,60 @@
             transform: rotateZ(360deg);
         }
     }
-    
+
     .lyrics {
         width: 100%;
         height: 16rem;
         margin-top: 3rem;
     }
-    
+
     .lyrics li {
         margin: 2rem 0;
         text-align: center;
         height: 1rem;
         padding: 0 1rem;
     }
-    
+
     .lyrics li:nth-child(1) {
         font-size: .7rem;
         color: rgba(255, 255, 255, .2);
     }
-    
+
     .lyrics li:nth-child(2) {
         font-size: .9rem;
         color: rgba(255, 255, 255, .5);
     }
-    
+
     .lyrics li:nth-child(3) {
         font-size: 1.2rem;
         /*width: 15rem;*/
         color: rgba(255, 255, 255, 1);
     }
-    
+
     .lyrics li:nth-child(4) {
         font-size: .9rem;
         color: rgba(255, 255, 255, .5);
     }
-    
+
     .lyrics li:nth-child(5) {
         font-size: .7rem;
         color: rgba(255, 255, 255, .2);
     }
-    
+
     .lyriccurrent {
         color: rgba(255, 255, 255, 1);
         font-size: .7rem;
         padding: 0 4rem;
     }
-    
+
     .lyric {
         /*color: rgba(255, 255, 255, .2);*/
         /*font-size: .8rem;*/
         padding: 0 4rem;
     }
-    
+
     .volume {}
-    
+
     .volume .sumvolume {
         height: .1rem;
         width: 14rem;
@@ -322,14 +328,14 @@
         position: relative;
         z-index: 15;
     }
-    
+
     .volume .sumvolume .currentvolume {
         height: 100%;
         width: 90%;
         background-color: #fff;
         position: relative;
     }
-    
+
     .volume .sumvolume .currentvolume::before {
         content: '';
         width: .5rem;
@@ -341,12 +347,12 @@
         right: -.1rem;
         top: -.2rem;
     }
-    
+
     .playBack {
         margin-top: 1rem;
         display: flex;
     }
-    
+
     .playBack input {
         color: rgba(255, 255, 255, .8);
         background: transparent;
@@ -356,21 +362,21 @@
         padding: 0 1rem;
         margin: 1.5rem 0;
     }
-    
+
     .playBack span {
         font-size: .8rem;
         margin: 1.5rem 0;
         padding: 0 1rem;
         color: rgba(255, 255, 255, .8)
     }
-    
+
     .playBack .currentProgress {
         height: 100%;
         width: 0;
         background-color: #fff;
         position: relative;
     }
-    
+
     .playBack .currentProgress::before {
         content: '';
         width: .5rem;
@@ -382,7 +388,7 @@
         right: -.1rem;
         top: -.2rem;
     }
-    
+
     .playBack .schedule {
         margin-top: 2rem;
         width: 14rem;
@@ -390,21 +396,21 @@
         background-color: rgba(255, 255, 255, .2);
         margin: 2rem 0 0 0;
     }
-    
+
     .buttons {
         display: flex;
         justify-content: center;
     }
-    
-    .previous {
+
+    .buttons .previous {
         height: 2.5rem;
         width: 2.5rem;
         border-radius: 50%;
         background-color: rgba(255, 255, 255, .1);
         position: relative;
     }
-    
-    .previous .long {
+
+    .buttons .previous .long {
         height: 1.3rem;
         width: .2rem;
         background-color: #fff;
@@ -413,8 +419,8 @@
         top: .6rem;
         left: .8rem;
     }
-    
-    .previous .triangle {
+
+    .buttons .previous .triangle {
         height: 0;
         width: 0;
         border-right: .66rem solid #fff;
@@ -424,8 +430,8 @@
         top: .6rem;
         left: 1rem;
     }
-    
-    .pause {
+
+    .buttons .pause {
         height: 4rem;
         width: 4rem;
         border-radius: 50%;
@@ -433,8 +439,8 @@
         margin: 0 2.2rem;
         position: relative;
     }
-    
-    .pause::before {
+
+    .buttons .pause::before {
         content: '';
         width: .4rem;
         height: 1.8rem;
@@ -445,8 +451,8 @@
         top: 1.1rem;
         left: 1.2rem;
     }
-    
-    .pause::after {
+
+    .buttons .pause::after {
         content: '';
         width: .4rem;
         height: 1.8rem;
@@ -457,8 +463,8 @@
         top: 1.1rem;
         left: 2.3rem;
     }
-    
-    .continue {
+
+    .buttons .continue {
         height: 4rem;
         width: 4rem;
         border-radius: 50%;
@@ -466,8 +472,8 @@
         margin: 0 2.2rem;
         position: relative;
     }
-    
-    .continue::before {
+
+    .buttons .continue::before {
         content: '';
         display: block;
         position: absolute;
@@ -479,16 +485,16 @@
         border-top: .9rem solid transparent;
         border-bottom: .9rem solid transparent;
     }
-    
-    .next {
+
+    .buttons .next {
         height: 2.5rem;
         width: 2.5rem;
         border-radius: 50%;
         background-color: rgba(255, 255, 255, .1);
         position: relative;
     }
-    
-    .next .long {
+
+    .buttons .next .long {
         height: 1.3rem;
         width: .2rem;
         background-color: #fff;
@@ -497,8 +503,8 @@
         top: .6rem;
         right: .8rem;
     }
-    
-    .next .triangle {
+
+    .buttons .next .triangle {
         height: 0;
         width: 0;
         border-left: .66rem solid #fff;

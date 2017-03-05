@@ -9,7 +9,7 @@
 </template>
 <style>
 .fli{
-    height: 8%;
+    height: 7%;
     font-size: 1rem;
 }
 .fli i{
@@ -19,7 +19,7 @@
     height: 100%;
 }
 .mint-header{
-    background-color: rgba(105, 25, 51, .9);
+    background-color: transparent;
 }
 </style>
 <script>

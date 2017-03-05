@@ -1,11 +1,5 @@
 <template>
-    <div class="container">
-        <div class="header">
-            <router-link to='/recommend'>推荐</router-link>
-            <router-link to='/rank'>排行</router-link>
-            <router-link to='/sheet'>歌单</router-link>
-            <router-link to='/me'>我的</router-link>
-        </div>
+    <div>
         <div class="main">
             <div class="account">
                 <!--<div class="head">

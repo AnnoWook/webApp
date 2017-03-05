@@ -1,16 +1,10 @@
 <template>
-    <div class="container">
-        <div class="header">
-            <router-link to='/recommend'>推荐</router-link>
-            <router-link to='/rank'>排行</router-link>
-            <router-link to='/sheet'>歌单</router-link>
-            <router-link to='/me'>我的</router-link>
-        </div>
+    <div>
         <div class="main">
             <div class="search2">
-                <router-link to='/search'>
-                    <input type="text" name="" value="" placeholder="搜索歌曲、歌手...">
-                </router-link> 
+                <a>
+                    <input type="text" name="" value="" placeholder="搜索歌曲、歌手..." @click='so({ name : true })'>
+                </a>
                 <button type="button" name="button"><i class="mintui mintui-search"></i></button>
             </div>
             <div class="rank">
@@ -22,7 +16,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in hotItems" @click="play(hotItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in hotItems" @click="play({songdata : hotItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -39,7 +33,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in salesItems" @click="play(salesItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in salesItems" @click="play({songdata:salesItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -56,7 +50,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in hongkongItems" @click="play(hongkongItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in hongkongItems" @click="play({songdata:hongkongItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -73,7 +67,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in balladItems" @click="play(balladItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in balladItems" @click="play({songdata:balladItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -90,7 +84,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in rockItems" @click="play(rockItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in rockItems" @click="play({songdata:rockItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -107,7 +101,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in americaItems" @click="play(americaItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in americaItems" @click="play({songdata:americaItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -124,7 +118,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in koreaItems" @click="play(koreaItems[key].songid)" class="listsong">
+                        <li v-for="(value,key) in koreaItems" @click="play({songdata:koreaItems[key]})" class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -141,7 +135,7 @@
                       </li>
                     </ul>
                     <ul>
-                        <li v-for="(value,key) in jpItems" @click="play(jpItems[key].songid)"  class="listsong">
+                        <li v-for="(value,key) in jpItems" @click="play({songdata:jpItems[key]})"  class="listsong">
                             {{key+1}} {{ value.songname }}
                         </li>
                     </ul>
@@ -164,12 +158,12 @@
         justify-content: center;
         align-items: center;
     }
-    
+
     .search2 a {
         display: inline-block;
         width: 80%;
     }
-    
+
     .search2 input {
         height: 1.3rem;
         width: 100%;
@@ -180,7 +174,7 @@
         background-color: rgba(0, 0, 0, .1);
         color: rgb(0, 0, 0, 1);
     }
-    
+
     .search2 button {
         height: 1rem;
         width: 10%;
@@ -188,121 +182,93 @@
         color: rgba(0, 0, 0, 1);
         background: rgba(0, 0, 0, 0);
         border: none;
-        padding: 0;
+        padding-left: .5rem;
         margin: 0;
         outline-style: none;
     }
-    
+
     .search2 button i {
         font-size: 1.1rem;
     }
-    
+
     .rank {
         margin: 0 1rem 0 1rem;
     }
-    
+
     .rank h5 {
         font-size: 1rem;
-        /*color: rgba(255, 255, 255, .8);*/
     }
-    
+
     .rank .recommend {
-        border-top: .05rem solid rgba(255, 255, 255, .2);
+        border-top: .05rem solid rgba(0, 0, 0, .2);
         padding-top: .5rem;
         margin: .5rem 0;
     }
 </style>
 <script>
+    import { mapMutations } from 'vuex'
     export default {
         data() {
             return {
                 rq: [],
 
-                hot: 26, //热歌
                 hotItems: '',
                 hotImag: '',
-                sales: 23, //销量
                 salesItems: '',
                 salesImag: '',
-                hongkong: 6, //港台
                 hongkongItems: '',
                 hongkongImag: '',
-                ballad: 18, //民谣
                 balladItems: '',
                 balladImag: '',
-                rock: 19, //摇滚
                 rockItems: '',
                 rockImag: '',
-                america: 3, //欧美
                 americaItems: '',
                 americaImag: '',
-                korea: 16, //韩国
                 koreaItems: '',
                 koreaImag: '',
-                jp: 17, //日本
                 jpItems: '',
                 jpImag: '',
             }
         },
         mounted: function() {
-            this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.hot}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.hotItems = foo
-                    this.hotImag = this.hotItems[0].albumpic_big
-                }),
-                this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.sales}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.salesItems = foo
-                    this.salesImag = this.salesItems[0].albumpic_big
-                }),
-                this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.hongkong}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.hongkongItems = foo
-                    this.hongkongImag = this.hongkongItems[0].albumpic_big
-
-                }),
-                this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.ballad}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.balladItems = foo
-                    this.balladImag = this.balladItems[0].albumpic_big
-
-                })
-            this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.rock}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.rockItems = foo
-                    this.rockImag = this.rockItems[0].albumpic_big
-
-                }),
-                this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.america}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.americaItems = foo
-                    this.americaImag = this.americaItems[0].albumpic_big
-                }),
-                this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.korea}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.koreaItems = foo
-                    this.koreaImag = this.koreaItems[0].albumpic_big
-                }),
-                this.$http.get(`https://route.showapi.com/213-4?showapi_appid=31967&showapi_timestamp=&topid=${this.jp}&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
-                .then(function(response) {
-                    var foo = response.body.showapi_res_body.pagebean.songlist
-                    this.jpItems = foo
-                    this.jpImag = this.jpItems[0].albumpic_big
-                })
+            this.$store.dispatch('getHot',).then((response) => {
+                this.hotItems = response.body.showapi_res_body.pagebean.songlist
+                this.hotImag = this.hotItems[0].albumpic_big
+            })
+            this.$store.dispatch('getSales',).then((response) => {
+                this.salesItems = response.body.showapi_res_body.pagebean.songlist
+                this.salesImag = this.salesItems[0].albumpic_big
+            })
+            this.$store.dispatch('getHongkong',).then((response) => {
+                this.hongkongItems = response.body.showapi_res_body.pagebean.songlist
+                this.hongkongImag = this.hongkongItems[0].albumpic_big
+            })
+            this.$store.dispatch('getBallad',).then((response) => {
+                this.balladItems = response.body.showapi_res_body.pagebean.songlist
+                this.balladImag = this.balladItems[0].albumpic_big
+            })
+            this.$store.dispatch('getRock',).then((response) => {
+                this.rockItems = response.body.showapi_res_body.pagebean.songlist
+                this.rockImag = this.rockItems[0].albumpic_big
+            })
+            this.$store.dispatch('getAmerica',).then((response) => {
+                this.americaItems = response.body.showapi_res_body.pagebean.songlist
+                this.americaImag = this.americaItems[0].albumpic_big
+            })
+            this.$store.dispatch('getKorea',).then((response) => {
+                this.koreaItems = response.body.showapi_res_body.pagebean.songlist
+                this.koreaImag = this.koreaItems[0].albumpic_big
+            })
+            this.$store.dispatch('getJp',).then((response) => {
+                this.jpItems = response.body.showapi_res_body.pagebean.songlist
+                this.jpImag = this.jpItems[0].albumpic_big
+            })
         },
         methods: {
-            play(id) {
-                this.$router.push({
-                    path: `player${id}`
-                })
-            }
+            ...mapMutations({
+                play : 'getData' ,
+                so : 'getName',
+            })
         }
     }
 </script>
