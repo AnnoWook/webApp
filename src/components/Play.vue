@@ -54,9 +54,7 @@
         </audio>
         <!-- 全屏播放 -->
         <div class="play">
-            <div class="playbackground">
-
-            </div>
+            <img src="" alt="" id="playbackground">
             <mt-header title="播放" class="fli" id="playsongname">
                 <a slot="left" @click='returnhome'>
                     <mt-button icon="back" class="return"></mt-button>
@@ -77,13 +75,13 @@
                 <!-- <div v-if="isLoading" class="loadinglrc">
                     等待歌词载入....
                 </div> -->
-                <div class="lyrics">
+                <!-- <div class="lyrics">
                     <ul>
                         <li class="lyriccurrent">
                             {{ lyricstime }}
                         </li>
                     </ul>
-                </div>
+                </div>-->
                 <div class="">
 
                 </div>
@@ -142,8 +140,6 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         watch:{
             deep: true,
             cetTime: function(curVal, oldVal) {
-                console.log(curVal)
-                console.log(oldVal)
             }
         },
         methods:{
@@ -158,21 +154,20 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                     this.temp++;
                 }
                 document.querySelector('#playsongname .mint-header-title').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('audio').src = this.songlist[this.temp].url
+                document.querySelector('audio').src = this.songlist[this.temp].url == undefined ? this.songlist[this.temp].m4a : this.songlist[this.temp].url
                 document.querySelector('#cover').src = this.songlist[this.temp].albumpic_small
                 document.querySelector('.songname').innerHTML = this.songlist[this.temp].songname
                 document.querySelector('#singer').innerHTML =this.songlist[this.temp].singername
                 document.querySelector('.playcover').src=this.songlist[this.temp].albumpic_big
-                document.querySelector('.playbackground').style.background = 'url('+this.songlist[this.temp].albumpic_big+') 0 0 no-repeat / 100% 100%'
+                document.querySelector('#playbackground').src =this.songlist[this.temp].albumpic_big
 
                 for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
                     $('.m-list').children()[i].style.backgroundColor = ''
                 }
-                $('.m-list').children()[this.temp].style.backgroundColor = '#666'
+                $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
             },
             openlist:function(event){
                 $('.songlist').slideToggle("slow");
-                // event.stopPropagation()
             },
             close:function(){
                 $('.songlist').slideToggle("slow");
@@ -190,7 +185,6 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                     $('.playing').addClass('continue')
                     $(".opticalDisk").css("animation-play-state", "paused")
                 }
-                // event.stopPropagation()
             },
             previous:function(){
                 if (this.temp == -1 || this.temp == 0) {
@@ -199,16 +193,16 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                     this.temp--;
                 }
                 document.querySelector('#playsongname .mint-header-title').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('audio').src = this.songlist[this.temp].url
+                document.querySelector('audio').src = this.songlist[this.temp].url == undefined ? this.songlist[this.temp].m4a : this.songlist[this.temp].url
                 document.querySelector('#cover').src = this.songlist[this.temp].albumpic_small
                 document.querySelector('.songname').innerHTML = this.songlist[this.temp].songname
                 document.querySelector('#singer').innerHTML =this.songlist[this.temp].singername
                 document.querySelector('.playcover').src=this.songlist[this.temp].albumpic_big
-                document.querySelector('.playbackground').style.background = 'url('+this.songlist[this.temp].albumpic_big+') 0 0 no-repeat / 100% 100%'
+                document.querySelector('#playbackground').src =this.songlist[this.temp].albumpic_big
                 for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
                     $('.m-list').children()[i].style.backgroundColor = ''
                 }
-                $('.m-list').children()[this.temp].style.backgroundColor = '#666'
+                $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
 
             },
             next:function(){
@@ -219,16 +213,16 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                 }
 
                 document.querySelector('#playsongname .mint-header-title').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('audio').src = this.songlist[this.temp].url
+                document.querySelector('audio').src = this.songlist[this.temp].url == undefined ? this.songlist[this.temp].m4a : this.songlist[this.temp].url
                 document.querySelector('#cover').src = this.songlist[this.temp].albumpic_small
                 document.querySelector('.songname').innerHTML = this.songlist[this.temp].songname
                 document.querySelector('#singer').innerHTML =this.songlist[this.temp].singername
                 document.querySelector('.playcover').src=this.songlist[this.temp].albumpic_big
-                document.querySelector('.playbackground').style.background = 'url('+this.songlist[this.temp].albumpic_big+') 0 0 no-repeat / 100% 100%'
+                document.querySelector('#playbackground').src =this.songlist[this.temp].albumpic_big
                 for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
                     $('.m-list').children()[i].style.backgroundColor = ''
                 }
-                $('.m-list').children()[this.temp].style.backgroundColor = '#666'
+                $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
             },
             shift:function(){
                 $('.play').slideToggle();
@@ -253,7 +247,6 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                 m = m < 10 ? '0' + m : m
                 s = s < 10 ? '0' + s : s
                 $('.currentTime').val(m + ":" + s)
-                this.currentTime = m + ":" + s;
                 $('.miniplay .schedule').width() / document.querySelector('audio').duration
                 $('.play .schedule').width() / document.querySelector('audio').duration
 
@@ -282,13 +275,14 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
             },
         },
         updated(){
+
             document.querySelector('#playsongname .mint-header-title').innerHTML = this.data.songname
             document.querySelector('#audio').src = `http://ws.stream.qqmusic.qq.com/${this.data.songid}.m4a?fromtag=46`
             document.querySelector('#cover').src = this.data.albumpic_small
             document.querySelector('.songname').innerHTML = this.data.songname
             document.querySelector('#singer').innerHTML = this.data.singername
             document.querySelector('.playcover').src=this.data.albumpic_big
-            document.querySelector('.playbackground').style.background = 'url('+this.data.albumpic_big+') 0 0 no-repeat / 100% 100%'
+            document.querySelector('#playbackground').src =this.data.albumpic_big
             if( $('.m-list').children().length - 1 === this.flag ){
                 for( var i = 0 ;i < this.songlist.length;i++){
                     if( this.songlist[i].songname === this.data.songname ){
@@ -296,7 +290,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                             $('.m-list').children()[j].style.backgroundColor = ''
                         }
                         this.temp = i
-                        $('.m-list').children()[i].style.backgroundColor = '#666'
+                        $('.m-list').children()[i].style.backgroundColor = 'rgba(102,102,102,.5)'
                     }
                 }
             }else{
@@ -518,15 +512,26 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         bottom: 0;
         z-index: 100;
     }
-    .playbackground{
+    #playbackground{
         height: 100%;
         width: 100%;
         filter: blur(100px);
+        -webkit-filter: blur(100px);
         position: absolute;
-        z-index: 0;
+        z-index: 200;
+    }
+    #canvas{
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        z-index: 200;
+    }
+    #playsongname{
+        z-index: 201;
     }
     .playmain {
         height: 0;
+        z-index: 201;
     }
 
     .loadinglrc {
@@ -543,10 +548,14 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         background: url(../image/timg.png) 0 0 no-repeat;
         background-size: 15rem 15rem ;
         animation: circle_top 12s linear 0s forwards;
+        -webkit-animation: circle_top 12s linear 0s forwards;
         animation-iteration-count: infinite;
+        -webkit-animation-iteration-count: infinite;
         animation-play-state: running;
+        -webkit-animation-play-state: running;
         border-radius: 50%;
         position: relative;
+        z-index: 201;
     }
     .playcover{
         width: 56%;
@@ -568,10 +577,19 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
             transform: rotateZ(360deg);
         }
     }
+    @-webkit-keyframes circle_top {
+        form {
+            -webkit-transform: rotateZ(0deg);
+        }
+        to {
+            -webkit-transform: rotateZ(360deg);
+        }
+    }
 
     .lyrics {
         width: 100%;
         height: 2rem;
+        z-index: 201;
     }
 
     .lyrics li {
@@ -588,7 +606,9 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         padding: 0 4rem;
     }
 
-    .volume {}
+    .volume {
+        z-index: 201;
+    }
 
     .volume .sumvolume {
         height: .1rem;
@@ -596,7 +616,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         background-color: rgba(255, 255, 255, .2);
         margin: 0 auto;
         position: relative;
-        z-index: 15;
+        z-index: 201;
     }
 
     .volume .sumvolume .currentvolume {
@@ -619,8 +639,9 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
     }
 
     .playBack {
-        margin-top: 1rem;
+        margin-top: -1rem;
         display: flex;
+        z-index: 201;
     }
 
     .playBack input {
@@ -631,13 +652,16 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         width: 2.5rem;
         padding: 0 1rem;
         margin: 1.5rem 0;
+        z-index: 201;
     }
 
     .playBack span {
         font-size: .8rem;
         margin: 1.5rem 0;
         padding: 0 1rem;
-        color: rgba(255, 255, 255, .8)
+        color: rgba(255, 255, 255, .8);
+        z-index: 201;
+
     }
 
     .playBack .currentProgress {
@@ -645,6 +669,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         width: 0;
         background-color: #fff;
         position: relative;
+        z-index: 201;
     }
 
     .playBack .currentProgress::before {
@@ -665,12 +690,13 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         height: .1rem;
         background-color: rgba(255, 255, 255, .2);
         margin: 2rem 0 0 0;
-        z-index: 100;
+        z-index: 201;
     }
 
     .buttons {
         display: flex;
         justify-content: center;
+        z-index: 201;
     }
 
     .buttons .previous {
@@ -679,6 +705,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         border-radius: 50%;
         background-color: rgba(255, 255, 255, .1);
         position: relative;
+        z-index: 201;
     }
 
     .buttons .previous .long {
@@ -709,6 +736,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         background-color: rgba(255, 255, 255, .1);
         margin: 0 2.2rem;
         position: relative;
+        z-index: 201;
     }
 
     .buttons .pause::before {
@@ -742,6 +770,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         background-color: rgba(255, 255, 255, .1);
         margin: 0 2.2rem;
         position: relative;
+        z-index: 201;
     }
 
     .buttons .continue::before {
@@ -763,6 +792,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         border-radius: 50%;
         background-color: rgba(255, 255, 255, .1);
         position: relative;
+        z-index: 201;
     }
 
     .buttons .next .long {

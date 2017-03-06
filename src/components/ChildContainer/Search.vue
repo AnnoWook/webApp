@@ -106,12 +106,7 @@
                 }
                 this.result = _that.result
             },
-            // focus(){
-            //     $("input").trigger("click").focus()
-            // },
-            // click: function() {},
             search: function() {
-                console.log(1)
                 this.isLoading = true
                 this.$http.get(`https://route.showapi.com/213-1?keyword=${document.querySelector('#seek').value}&page=${this.paging}&showapi_appid=31967&showapi_timestamp=&showapi_sign=7c45d428c1024a5e88c3cbc78a506646`, )
                     .then(function(response) {
