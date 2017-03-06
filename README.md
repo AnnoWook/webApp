@@ -1,10 +1,6 @@
 ###项目文档
 
 
-
-
-
-
 ##### webApp项目建立
 
 * 四个页面分类(推荐,排行,路由,我的)
@@ -117,4 +113,9 @@
 + npm run build
 
 ##### 项目截图 
+
+![首页] (https://github.com/houbx/webApp/blob/master/screenshot/recommend.png)
+![排行] (https://github.com/houbx/webApp/blob/master/screenshot/rank.png)
+![播放] (https://github.com/houbx/webApp/blob/master/screenshot/play.png)
+![搜索] (https://github.com/houbx/webApp/blob/master/screenshot/search.png)
 
