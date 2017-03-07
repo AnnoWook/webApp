@@ -56,9 +56,7 @@
 
     table {
         border-collapse: collapse;
-        /*让表格边框细线*/
         border-spacing: 0;
-        /*清除边框间距*/
     }
 
     fieldset,
@@ -142,27 +140,28 @@
     html {
         font-size:20px;
     }
-    @media screen and (min-width: 68vh){
+    @media screen and (min-width: 75vh){
         html{
-            width: 68vh;
+            width: 75vh;
             margin: 0 auto;
             font-size: 22px;
 
         }
+
         ::-webkit-scrollbar{
             width: 1px;
         }
         .play{
-            width: 68vh !important;
+            width: 75vh !important;
         }
         .recommend ul:first-child li img {
             width: 100%;
         }
         .swiper-pagination{
-            width: 68vh !important;
+            width: 75vh !important;
         }
         .miniplay{
-            width: 68vh !important;
+            width: 75vh !important;
         }
     }
 
@@ -219,7 +218,23 @@
             width: 100%;
         }
     }
-/*
+    @media screen and (width:1024px) {
+        html {
+            font-size: 44px;
+        }
+        .main {
+            margin-top: 10% !important;
+        }
+        .main .new {
+            height: 40% !important;
+        }
+        .swiper-pagination {
+            height: 7% !important;
+        }
+        .swiper-pagination>span {
+            line-height: 230% !important;
+        }
+    }
     @media screen and (width:768px) {
         html {
             font-size: 34px;
@@ -234,7 +249,7 @@
             line-height: 200% !important;
         }
     }
-
+/*
     @media screen and (width:960px) {
         html {
             font-size: 36px;
@@ -247,23 +262,7 @@
         }
     }
 
-    @media screen and (width:1024px) {
-        html {
-            font-size: 44px;
-        }
-        .main {
-            margin-top: 10% !important;
-        }
-        .main .new {
-            height: 40% !important;
-        }
-        .swiper-pagination {
-            height: 13% !important;
-        }
-        .swiper-pagination>span {
-            line-height: 230% !important;
-        }
-    }
+
 
     @media screen and (width:1280px) {
         html {

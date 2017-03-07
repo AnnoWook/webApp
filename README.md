@@ -68,7 +68,7 @@
 
 * 问题与想法
 * 整体背景修改后的部分样式不明显问题
-* 懒加载问题?
+* 懒加载问题
 * 关于播放页面
     + 3个按钮在移动端显示的时候总感觉是歪的
     + 无播放列表 没有做切换歌曲的功能
@@ -116,10 +116,9 @@
 ## Build
 + npm run build
 
-##### 项目截图 
+##### 项目截图
 
 ![首页] (https://github.com/houbx/webApp/blob/master/screenshot/recommend.png)
 ![排行] (https://github.com/houbx/webApp/blob/master/screenshot/rank.png)
 ![播放] (https://github.com/houbx/webApp/blob/master/screenshot/play.png)
 ![搜索] (https://github.com/houbx/webApp/blob/master/screenshot/search.png)
-

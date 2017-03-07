@@ -8,8 +8,7 @@ import store from './store'
 
 Vue.use(VueRouter)
 Vue.use(Mint)
-// Vue.use(StackBlur)
-    // 引入文件
+// 引入文件
 import App from './App.vue' //主页
 import routes from './router.js' //路由
 

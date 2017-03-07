@@ -1,6 +1,6 @@
 <template>
     <div id="play">
-        <div class="miniplay" >
+        <div class="miniplay" v-show="conceal">
             <div style="display:none;">
                 {{ data }}
                 {{ songlist }}
@@ -49,9 +49,7 @@
 
             </div>
         </div>
-        <audio controls autoplay id="audio" style="display:none" v-on:canplay='monitor' v-on:timeupdate='realtime' v-on:ended='ended'>
-            <source src=''  id="source">
-        </audio>
+
         <!-- 全屏播放 -->
         <div class="play">
             <img src="" alt="" id="playbackground">
@@ -81,12 +79,12 @@
                             {{ lyricstime }}
                         </li>
                     </ul>
-                </div>-->
+                </div> -->
                 <div class="">
 
                 </div>
                 <div class="playBack">
-                    <input class="currentTime"  v-model='cetTime'>
+                    <input class="currentTime"  v-model="cetTime">
                     <!-- <span class="currentTime">00:00</span> -->
                     <div class="schedule" v-on:click='leaps'>
                         <div class="currentProgress" >
@@ -117,10 +115,12 @@
                     </div>
                 </div>
             </div>
+
         </div>
-
-    </div>
-
+        <audio controls autoplay id="audio" style="display:none" v-on:canplay='monitor' v-on:timeupdate='realtime' v-on:ended='ended'>
+            <source src=''  id="source">
+        </audio>
+        </div>
 </template>
 
 <script>
@@ -131,16 +131,14 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                 flag : -1,
                 isLoading: true,
                 spaceX: 0,
+                lyricstime : '',
             }
         },
         computed:{
             data(){return this.$store.state.data},
             songlist(){return this.$store.state.songlist},
-        },
-        watch:{
-            deep: true,
-            cetTime: function(curVal, oldVal) {
-            }
+            conceal(){return this.$store.state.conceal},
+            songid(){return this.$store.state.songid},
         },
         methods:{
             ...mapMutations({
@@ -244,8 +242,8 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                 var m, s;
                 m = Math.floor(document.querySelector('audio').currentTime / 60);
                 s = Math.floor(document.querySelector('audio').currentTime % 60);
-                m = m < 10 ? '0' + m : m
-                s = s < 10 ? '0' + s : s
+                m = m < 10 ? '0' + m : m;
+                s = s < 10 ? '0' + s : s;
                 $('.currentTime').val(m + ":" + s)
                 $('.miniplay .schedule').width() / document.querySelector('audio').duration
                 $('.play .schedule').width() / document.querySelector('audio').duration
@@ -275,7 +273,6 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
             },
         },
         updated(){
-
             document.querySelector('#playsongname .mint-header-title').innerHTML = this.data.songname
             document.querySelector('#audio').src = `http://ws.stream.qqmusic.qq.com/${this.data.songid}.m4a?fromtag=46`
             document.querySelector('#cover').src = this.data.albumpic_small

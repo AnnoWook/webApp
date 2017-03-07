@@ -155,7 +155,7 @@
                             lyricsthat.push(temp3)
                         })
                         this.lyrics = lyricsthat
-                        document.querySelector('.mint-header-title').innerHTML = this.lyrics[6]
+                        // document.querySelector('.mint-header-title').innerHTML = this.lyrics[6]
                     })
             },
             start: function() {

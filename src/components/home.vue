@@ -1,24 +1,24 @@
 <template>
     <div id="box">
-            <div class="content-warper" v-show="!nam">
-                <div class="swiper-pagination" slot="pagination"></div>
-                <swiper :options="swiperOption" class="swiper-box">
-                    <swiper-slide class="swiper-item">
-                    <Recommend></Recommend>
-                    </swiper-slide>
-                    <swiper-slide class="swiper-item">
-                    <Rank></Rank>
-                    </swiper-slide>
-                    <swiper-slide class="swiper-item">
-                    <Sheet></Sheet>
-                    </swiper-slide>
-                    <swiper-slide class="swiper-item">
-                    <Me></Me>
-                    </swiper-slide>
-                </swiper>
-            </div>
-            <Search v-show="nam"></Search>
-            <Play></Play>
+        <div class="content-warper" v-show="!nam">
+            <div class="swiper-pagination" slot="pagination"></div>
+            <swiper :options="swiperOption" class="swiper-box">
+                <swiper-slide class="swiper-item">
+                <Recommend></Recommend>
+                </swiper-slide>
+                <swiper-slide class="swiper-item">
+                <Rank></Rank>
+                </swiper-slide>
+                <swiper-slide class="swiper-item">
+                <Sheet></Sheet>
+                </swiper-slide>
+                <swiper-slide class="swiper-item">
+                <Me></Me>
+                </swiper-slide>
+            </swiper>
+        </div>
+        <Search v-show="nam"></Search>
+        <Play></Play>
     </div>
 </template>
 
@@ -65,14 +65,8 @@
 <style>
     #box{
         height: 100%;
-        /*position: relative;
-        transition: all 1s;
-        transform-style:preserve-3d;
-        transform-origin: left;*/
+
     }
-    /*.top{
-        height: 100%;
-    }*/
     .swiper-box {
         height: 100%;
     }
@@ -86,7 +80,7 @@
     }
 
     .swiper-pagination {
-        height: 7%;
+        height: 7% ;
         background-color:rgba(156, 39, 176, 1);
         width: 100%;
         position: fixed !important;
