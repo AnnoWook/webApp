@@ -84,7 +84,7 @@
 
                 </div>
                 <div class="playBack">
-                    <input class="currentTime"  v-model="cetTime">
+                    <input class="currentTime"  v-model="currentTime">
                     <!-- <span class="currentTime">00:00</span> -->
                     <div class="schedule" v-on:click='leaps'>
                         <div class="currentProgress" >
@@ -131,7 +131,7 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                 flag : -1,
                 isLoading: true,
                 spaceX: 0,
-                lyricstime : '',
+                currentTime : '',
             }
         },
         computed:{

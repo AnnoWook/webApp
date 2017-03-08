@@ -19,3 +19,6 @@ export const getSales = ({},id) => dispose(API.sales)(id)
 export const getHot = ({},id) => dispose(API.hot)(id)
 
 export const play = ({ commit }) => commit('play')
+
+
+// export const getdata = makeAction('GET_DATA')
