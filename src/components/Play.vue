@@ -1,10 +1,11 @@
 <template>
     <div id="play">
         <div class="miniplay" v-show="conceal">
-            <div style="display:none;">
-                {{ data }}
-                {{ songlist }}
-            </div>
+            <!-- <div style="display:none;"> -->
+                <!-- {{ this.index }} -->
+                <!-- {{ data }} -->
+                <!-- {{ songlist }} -->
+            <!-- </div> -->
             <div class="keep" @click='shift()'>
 
             </div>
@@ -16,13 +17,13 @@
             </div>
             <!-- 封面 歌名 歌手 -->
             <div class="cover">
-                <img src="" alt="" id="cover">
+                <img :src='coverSmall' alt="" id="cover">
             </div>
             <div class="songname">
-
+                {{ songname }}
             </div>
             <div id="singer">
-
+                {{ singername }}
             </div>
             <div class="songlistbutton" @click='openlist'>
                 <span></span>
@@ -38,7 +39,7 @@
                 </div>
                 <div class="songlists">
                     <ul class="m-list">
-                        <li class='listsingle' v-for='(value,key) in songlist'  @click='play({songdata : songlist[key]})' >
+                        <li class='listsingle' v-for='(value,key) in songlist' @click='play(key)' v-on:click=' clickTime += 1 ' >
                             <span>{{ value.songname }}</span> <i>-</i> <span>{{ value.singername }}</span>
                         </li>
                     </ul>
@@ -52,7 +53,7 @@
 
         <!-- 全屏播放 -->
         <div class="play">
-            <img src="" alt="" id="playbackground">
+            <img :src='backgroundCover' alt="" id="playbackground">
             <mt-header title="播放" class="fli" id="playsongname">
                 <a slot="left" @click='returnhome'>
                     <mt-button icon="back" class="return"></mt-button>
@@ -68,7 +69,7 @@
                 </div>
 
                 <div class="opticalDisk">
-                    <img src="" alt="" class="playcover">
+                    <img :src='coverBig' class="playcover">
                 </div>
                 <!-- <div v-if="isLoading" class="loadinglrc">
                     等待歌词载入....
@@ -84,17 +85,17 @@
 
                 </div>
                 <div class="playBack">
-                    <input class="currentTime"  v-model="currentTime">
-                    <!-- <span class="currentTime">00:00</span> -->
+                    <!-- <input class="currentTime"  v-model="currentTime"> -->
+                    <span class="currentTime">{{ currentTime }}</span>
                     <div class="schedule" v-on:click='leaps'>
                         <div class="currentProgress" >
 
                         </div>
                     </div>
-                    <span class="totalTime">00:00</span>
+                    <span class="totalTime">{{ duration }}</span>
                 </div>
                 <div class="buttons">
-                    <div class="previous" v-on:click='previous'>
+                    <div class="previous" @click='previous'>
                         <div class="long">
 
                         </div>
@@ -105,7 +106,7 @@
                     <div class="pause playing" v-on:click='start'>
 
                     </div>
-                    <div class="next" v-on:click='next'>
+                    <div class="next" @click='next'>
                         <div class="long">
 
                         </div>
@@ -117,52 +118,69 @@
             </div>
 
         </div>
-        <audio controls autoplay id="audio" style="display:none" v-on:canplay='monitor' v-on:timeupdate='realtime' v-on:ended='ended'>
+        <audio controls autoplay id="audio" @timeupdate='updateTime' @canplay='durationTime' style="display:none" @ended='endedTime' :src='dataUrl'>
             <source src=''  id="source">
         </audio>
         </div>
 </template>
 
 <script>
-import { mapGetters , mapActions ,mapMutations} from 'vuex'
+import { mapGetters , mapActions ,mapMutations , mapState } from 'vuex'
     export default {
         data(){
             return {
                 flag : -1,
                 isLoading: true,
                 spaceX: 0,
-                currentTime : '',
+                clickTime:0,
             }
         },
         computed:{
-            data(){return this.$store.state.data},
+            ...mapGetters([
+                'currentTime' , 'duration' , 'coverSmall' ,'coverBig', 'backgroundCover','dataUrl' ,'songname', 'singername',
+            ]),
+            ...mapState({
+
+            }),
             songlist(){return this.$store.state.songlist},
             conceal(){return this.$store.state.conceal},
-            songid(){return this.$store.state.songid},
+            index(){return this.$store.state.index},
         },
-        methods:{
-            ...mapMutations({
-                play : 'getData' ,
-                shift : 'getShift'
-            }),
-            ended:function(){
-                if(this.temp == -1 || this.temp == this.songlist.length - 1){
-                    this.temp = 0;
-                }else {
-                    this.temp++;
-                }
-                document.querySelector('#playsongname .mint-header-title').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('audio').src = this.songlist[this.temp].url == undefined ? this.songlist[this.temp].m4a : this.songlist[this.temp].url
-                document.querySelector('#cover').src = this.songlist[this.temp].albumpic_small
-                document.querySelector('.songname').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('#singer').innerHTML =this.songlist[this.temp].singername
-                document.querySelector('.playcover').src=this.songlist[this.temp].albumpic_big
-                document.querySelector('#playbackground').src =this.songlist[this.temp].albumpic_big
-
+        beforeUpdate(){
+            const index = this.index
+            const clickTime = this.clickTime
+            setTimeout(function(){
                 for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
                     $('.m-list').children()[i].style.backgroundColor = ''
                 }
-                $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
+                if( index === 0 && clickTime === 0){
+                    $('.m-list li:last').css('background-color','rgba(102,102,102,.5)')
+                }else{
+                    $('.m-list').children()[index].style.backgroundColor = 'rgba(102,102,102,.5)'
+                }
+            },0)
+        },
+        methods:{
+            ...mapMutations({
+                shift : 'getShift',
+            }),
+            ...mapMutations([
+                'play','previous','next', 'endedTime', // play是索引   上一首下一首
+            ]),
+            updateTime() {
+                // this.$store.commit()
+                this.$store.commit('updateCurrentTime',parseInt(document.querySelector('audio').currentTime))
+                $('.miniplay .schedule').width() / document.querySelector('audio').duration
+                $('.play .schedule').width() / document.querySelector('audio').duration
+                $('.miniplay .currentProgress').css('width', document.querySelector('audio').currentTime * $('.miniplay .schedule').width() / document.querySelector('audio').duration)
+                $('.play .currentProgress').css('width', document.querySelector('audio').currentTime * $('.play .schedule').width() / document.querySelector('audio').duration)
+            },
+            durationTime() {
+                this.$store.commit('durationTime',parseInt(document.querySelector('audio').duration))
+                document.querySelector('audio').volume = 0.9
+            },
+            shift:function(){
+                $('.play').slideToggle();
             },
             openlist:function(event){
                 $('.songlist').slideToggle("slow");
@@ -184,73 +202,14 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                     $(".opticalDisk").css("animation-play-state", "paused")
                 }
             },
-            previous:function(){
-                if (this.temp == -1 || this.temp == 0) {
-                    this.temp = this.songlist.length - 1;
-                } else {
-                    this.temp--;
-                }
-                document.querySelector('#playsongname .mint-header-title').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('audio').src = this.songlist[this.temp].url == undefined ? this.songlist[this.temp].m4a : this.songlist[this.temp].url
-                document.querySelector('#cover').src = this.songlist[this.temp].albumpic_small
-                document.querySelector('.songname').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('#singer').innerHTML =this.songlist[this.temp].singername
-                document.querySelector('.playcover').src=this.songlist[this.temp].albumpic_big
-                document.querySelector('#playbackground').src =this.songlist[this.temp].albumpic_big
-                for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
-                    $('.m-list').children()[i].style.backgroundColor = ''
-                }
-                $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
-
-            },
-            next:function(){
-                if(this.temp == -1 || this.temp == this.songlist.length - 1){
-                    this.temp = 0;
-                }else {
-                    this.temp++;
-                }
-
-                document.querySelector('#playsongname .mint-header-title').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('audio').src = this.songlist[this.temp].url == undefined ? this.songlist[this.temp].m4a : this.songlist[this.temp].url
-                document.querySelector('#cover').src = this.songlist[this.temp].albumpic_small
-                document.querySelector('.songname').innerHTML = this.songlist[this.temp].songname
-                document.querySelector('#singer').innerHTML =this.songlist[this.temp].singername
-                document.querySelector('.playcover').src=this.songlist[this.temp].albumpic_big
-                document.querySelector('#playbackground').src =this.songlist[this.temp].albumpic_big
-                for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
-                    $('.m-list').children()[i].style.backgroundColor = ''
-                }
-                $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
-            },
-            shift:function(){
-                $('.play').slideToggle();
-            },
+            // previous:function(){
+                // for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
+                //     $('.m-list').children()[i].style.backgroundColor = ''
+                // }
+                // $('.m-list').children()[this.temp].style.backgroundColor = 'rgba(102,102,102,.5)'
+            // },
             returnhome:function(){
                 $('.play').slideToggle();
-            },
-            monitor: function() {
-                var m, s;
-                m = Math.floor(document.querySelector('audio').duration / 60);
-                s = Math.floor(document.querySelector('audio').duration % 60);
-                m = m < 10 ? '0' + m : m
-                s = s < 10 ? '0' + s : s
-                $('.totalTime').html(m + ":" + s)
-                document.querySelector('audio').volume = 0.9
-
-            },
-            realtime: function() {
-                var m, s;
-                m = Math.floor(document.querySelector('audio').currentTime / 60);
-                s = Math.floor(document.querySelector('audio').currentTime % 60);
-                m = m < 10 ? '0' + m : m;
-                s = s < 10 ? '0' + s : s;
-                $('.currentTime').val(m + ":" + s)
-                $('.miniplay .schedule').width() / document.querySelector('audio').duration
-                $('.play .schedule').width() / document.querySelector('audio').duration
-
-                $('.miniplay .currentProgress').css('width', document.querySelector('audio').currentTime * $('.miniplay .schedule').width() / document.querySelector('audio').duration)
-
-                $('.play .currentProgress').css('width', document.querySelector('audio').currentTime * $('.play .schedule').width() / document.querySelector('audio').duration)
             },
             leap: function(e) {
                 var width = $('.miniplay .schedule').width()
@@ -272,34 +231,6 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
                 document.querySelector('audio').volume = $('.currentvolume').width() / $('.sumvolume').width()
             },
         },
-        updated(){
-            document.querySelector('#playsongname .mint-header-title').innerHTML = this.data.songname
-            document.querySelector('#audio').src = `http://ws.stream.qqmusic.qq.com/${this.data.songid}.m4a?fromtag=46`
-            document.querySelector('#cover').src = this.data.albumpic_small
-            document.querySelector('.songname').innerHTML = this.data.songname
-            document.querySelector('#singer').innerHTML = this.data.singername
-            document.querySelector('.playcover').src=this.data.albumpic_big
-            document.querySelector('#playbackground').src =this.data.albumpic_big
-            if( $('.m-list').children().length - 1 === this.flag ){
-                for( var i = 0 ;i < this.songlist.length;i++){
-                    if( this.songlist[i].songname === this.data.songname ){
-                        for( var j = 0 , len = $('.m-list').children().length ; j < len ;j++ ){
-                            $('.m-list').children()[j].style.backgroundColor = ''
-                        }
-                        this.temp = i
-                        $('.m-list').children()[i].style.backgroundColor = 'rgba(102,102,102,.5)'
-                    }
-                }
-            }else{
-                this.flag = $('.m-list').children().length - 1
-                for( var i = 0 , len = $('.m-list').children().length ; i < len ;i++ ){
-                    this.temp = i
-                    $('.m-list').children()[i].style.backgroundColor = ''
-                }
-                $('.m-list').children()[this.flag].style.backgroundColor = '#666'
-            }
-        },
-
     }
 </script>
 
@@ -314,6 +245,9 @@ import { mapGetters , mapActions ,mapMutations} from 'vuex'
         width: 100%;
         background: rgba(255,255,255,.8);
         z-index: 20;
+    }
+    .liststyle{
+        background-color: rgba(102,102,102,.5);
     }
     .miniplay .keep{
         height: 90%;
